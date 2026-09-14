@@ -1,20 +1,20 @@
 # -*- coding: utf-8 -*-
 
 """
-Classe Author
+Classe JuryMember
 """
 from dataclasses import dataclass, field
 from .person import Person
 
 
 @dataclass
-class Author(Person):
-    """Auteur d'un ou plusieurs livres :
+class JuryMember(Person):
+    """Membre du jury :
     id              : clé primaire de l'entité persistante
-    biography     : biographie facultative de l'auteur
+    is_president     : boolean
     """
-    biography: str = field(default=None, init=False)
+    is_president: bool = field(default=None, init=False)
 
     def __str__(self) -> str:
         person_str = super().__str__()
-        return f"{person_str}, biographie :  {self.biography}"
+        return f"{person_str}, président :  {self.is_president}"

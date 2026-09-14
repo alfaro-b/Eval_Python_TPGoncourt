@@ -15,4 +15,4 @@ class Person(ABC):
     last_name: str
 
     def __str__(self) -> str:
-        return f"{self.first_name} {self.last_name} ({self.age} ans)"
+        return f"{self.first_name} {self.last_name}"
