@@ -13,7 +13,8 @@ class JuryMember(Person):
     id              : clé primaire de l'entité persistante
     is_president     : boolean
     """
-    is_president: bool = field(default=None, init=False)
+    is_president: bool = False
+    id_jury_member: int | None = field(default=None)
 
     def __str__(self) -> str:
         person_str = super().__str__()

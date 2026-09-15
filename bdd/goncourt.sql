@@ -160,7 +160,7 @@ INSERT INTO `author` (`id_author`, `biography`, `id_person`) VALUES
 DROP TABLE IF EXISTS jury_member;
 CREATE TABLE IF NOT EXISTS jury_member(
    id_jury_member INT NOT NULL AUTO_INCREMENT,
-   is_president BOOLEAN,
+   is_president BOOLEAN NOT NULL DEFAULT FALSE,
    id_person INT NOT NULL,
    PRIMARY KEY(id_jury_member),
    FOREIGN KEY(id_person) REFERENCES Person(id_person)
@@ -170,18 +170,18 @@ CREATE TABLE IF NOT EXISTS jury_member(
 -- Déchargement des données de la table `jury_member`
 --
 
+INSERT INTO jury_member (id_person) VALUES
+(17), -- Didier Decoin
+(18), -- Françoise Chandernagor
+(19), -- Tahar Ben Jelloun
+(20), -- Paule Constant
+(22), -- Pierre Assouline
+(23), -- Éric-Emmanuel Schmitt
+(24), -- Camille Laurens
+(25), -- Pascal Bruckner
+(26); -- Christine Angot
 INSERT INTO jury_member (is_president, id_person) VALUES
-(FALSE, 17), -- Didier Decoin
-(FALSE, 18), -- Françoise Chandernagor
-(FALSE, 19), -- Tahar Ben Jelloun
-(FALSE, 20), -- Paule Constant
-(TRUE, 21),  -- Philippe Claudel
-(FALSE, 22), -- Pierre Assouline
-(FALSE, 23), -- Éric-Emmanuel Schmitt
-(FALSE, 24), -- Camille Laurens
-(FALSE, 25), -- Pascal Bruckner
-(FALSE, 26); -- Christine Angot
-
+(TRUE, 21); -- Philippe Claudel
 
 -- --------------------------------------------------------
 
