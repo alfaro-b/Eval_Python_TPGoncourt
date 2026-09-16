@@ -25,3 +25,16 @@ new_id = book_dao.create(book_test)
 print(f"ID créé : {new_id}")
 print(f"Objet : {book_test}")
 print(f"ID dans l'objet : {book_test.id_book}")
+
+print("\n----- READ BY SELECTION -----")
+
+books = book_dao.read_by_selection(1)
+
+for book in books:
+    print(book.title)
+
+print("\n----- READ BY SELECTION VIDE -----")
+
+books = book_dao.read_by_selection(2)
+
+print(books)

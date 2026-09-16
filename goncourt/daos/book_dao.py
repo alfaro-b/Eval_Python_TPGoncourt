@@ -160,3 +160,35 @@ class BookDao(Dao[Book]):
                 Dao.connection.rollback()
                 print(f"Erreur lors de la modification du livre : {error}")
                 return False
+
+    def read_by_selection(self, id_selection: int) -> list[Book]:
+        books: list[Book] = []
+
+        with Dao.connection.cursor() as cursor:
+            try:
+                sql = """
+                SELECT book.* 
+                FROM book
+                JOIN belong ON book.id_book = belong.id_book
+                WHERE belong.id_selection=%s
+                """
+                cursor.execute(sql, (id_selection,))
+                records = cursor.fetchall()
+
+                for record in records:
+                    book = Book(
+                        id_book=record['id_book'],
+                        title=record['title'],
+                        summary=record['summary'],
+                        publication_date=record['publication_date'],
+                        nbr_pages=record['nbr_pages'],
+                        isbn=record['isbn'],
+                        publisher_price=record['publisher_price'],
+                        id_author=record['id_author'],
+                        id_publisher=record['id_publisher']
+                    )
+                    books.append(book)
+            except Exception as error:
+                print(f"Erreur lors de la lecture des livres {error}")
+
+        return books
