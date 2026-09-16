@@ -109,3 +109,27 @@ class SelectionDao(Dao[Selection]):
                 Dao.connection.rollback()
                 print(f"Erreur lors de la modification de la sélection : {error}")
                 return False
+
+    def read_by_number(self, number: int) -> Selection | None:
+        """Retourne la sélection correspondante au numéro fourni
+           ou None s'il n'a pu être trouvé"""
+
+        with Dao.connection.cursor() as cursor:
+            try:
+                sql = """SELECT * 
+                FROM selection
+                WHERE number=%s"""
+                cursor.execute(sql, (number,))
+                record = cursor.fetchone()
+
+                if record is not None:
+                    return Selection(
+                        id_selection=record['id_selection'],
+                        number=record['number'],
+                        date=record['date_']
+                    )
+
+            except Exception as error:
+                print(f"Erreur lors de la lecture de la sélection : {error}")
+
+        return None

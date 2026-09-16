@@ -19,15 +19,20 @@ class Contest:
     reprenant les cas d'utilisation et les spécifications fonctionnelles.
     """
 
-    def display_selection(self, id_selection: int):
+    def display_selection(self, selection_number: int):
         book_dao: BookDao = BookDao()
         author_dao: AuthorDao = AuthorDao()
         publisher_dao: PublisherDao = PublisherDao()
         main_character_dao: MainCharacterDao = MainCharacterDao()
         selection_dao: SelectionDao = SelectionDao()
 
-        books = book_dao.read_by_selection(id_selection)
-        selection = selection_dao.read(id_selection)
+        selection = selection_dao.read_by_number(selection_number)
+        if selection is None:
+            print("Selection inexistante")
+            return
+
+        books = book_dao.read_by_selection(selection.id_selection)
+
         print(selection)
         print('-' * 50)
 
