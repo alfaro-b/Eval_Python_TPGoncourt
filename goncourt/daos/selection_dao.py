@@ -161,3 +161,33 @@ class SelectionDao(Dao[Selection]):
                 return False
 
         return True
+
+    def add_votes(self, id_selection: int, id_book: int, votes_nbr: int) -> bool:
+        """Ajoute le nombre de votes à un livre de la sélection
+
+        :param votes_nbr: nombre de votes
+        :param id_selection: identifiant de la sélection
+        :param id_book: identifiant du livre
+        :return: True si l'ajout a pu être réalisé
+        """
+
+        if id_selection is None or id_book is None:
+            return False
+
+        with Dao.connection.cursor() as cursor:
+            try:
+                sql = """
+                    UPDATE belong
+                    SET votes_number = %s
+                    WHERE id_selection = %s AND id_book = %s
+                """
+                cursor.execute(sql, (votes_nbr, id_selection, id_book))
+
+                Dao.connection.commit()
+
+            except Exception as error:
+                Dao.connection.rollback()
+                print(f"Erreur lors de l'ajout du nombre de votes : {error}")
+                return False
+
+        return True

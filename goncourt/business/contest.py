@@ -129,3 +129,52 @@ class Contest:
         books_added = book_dao.read_by_selection(selection.id_selection)
         for book in books_added:
             print(book.title)
+
+    def add_final_vote(self):
+        """Permet au président d'ajouter le nombre de votes à un livre de la sélection 3."""
+        selection_dao: SelectionDao = SelectionDao()
+        book_dao: BookDao = BookDao()
+
+        # Affichage de la liste des livres de la sélection 3
+        selection = selection_dao.read_by_number(3)
+        if selection is None:
+            print("La sélection 3 n'existe pas.")
+            return
+        books_selection3 = book_dao.read_by_selection(selection.id_selection)
+        print("Livres en compétitions - Sélection 3 : ")
+        for book in books_selection3:
+            print(f"{book.id_book} - {book.title}")
+
+        # Vérification que le livre choisi fait partie de la sélection 3
+        print("Pour quel livre, vous souhaitez ajouter le nombre de votes?")
+        try:
+            book_choosed_id = int(input("Saisissez le numéro du livre : "))
+        except ValueError:
+            print("Les identifiants des livres doivent être des nombres.")
+            return
+
+        # Vérification que les livres choisis font bien partie de la sélection 3
+        book_found = False
+
+        for book in books_selection3:
+            if book.id_book == book_choosed_id:
+                book_found = True
+                break
+
+        if not book_found:
+            print(f"Le livre {book_choosed_id} ne fait pas partie de la sélection 3.")
+            return
+
+        # Saisie du nombre de votes pour le livre choisi
+        book_choosed = book_dao.read(book_choosed_id)
+        print(f"Pour le livre {book_choosed.title}")
+        try:
+            votes_nbr = int(input("Saisissez le nombre de votes"))
+        except ValueError:
+            print("Le nombre de votes doit être un nombre.")
+            return
+        if votes_nbr <= 0:
+            print("Le nombre de votes ne peut être négatif.")
+            return
+
+        selection_dao.add_votes(selection.id_selection, book_choosed_id, votes_nbr)

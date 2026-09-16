@@ -17,7 +17,10 @@ def main() -> None:
     contest = Contest()
     contest.indicate_selection_books()
 
-    # Pour tout utilisateur, affichage des livres en compétition
+    # Pour le président, ajout du nombre de votes à un livre de la sélection 3
+    contest.add_final_vote()
+
+    # # Pour tout utilisateur, affichage des livres en compétition
     print("Voici les sélections disponibles:")
     selection_dao: SelectionDao = SelectionDao()
     selections = selection_dao.read_all()
@@ -25,8 +28,6 @@ def main() -> None:
         print(selection)
 
     choice = int(input("Saisissez le numéro de la sélection que vous souhaitez voir : "))
-
-    contest = Contest()
 
     print('-' * 50)
     contest.display_selection(choice)
