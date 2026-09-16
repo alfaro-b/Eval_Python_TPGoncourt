@@ -39,14 +39,14 @@ class Dao[T](ABC):
            ou None s'il n'a pu être trouvé"""
         ...
 
-    # @abstractmethod
-    # def update(self, obj: T) -> bool:
-    #     """Met à jour en BDD l'entité correspondant à obj, pour y correspondre
-    #
-    #     :param obj: objet déjà mis à jour en mémoire
-    #     :return: True si la mise à jour a pu être réalisée
-    #     """
-    #     ...
+    @abstractmethod
+    def update(self, obj: T) -> bool:
+        """Met à jour en BDD l'entité correspondant à obj, pour y correspondre
+
+        :param obj: objet déjà mis à jour en mémoire
+        :return: True si la mise à jour a pu être réalisée
+        """
+        ...
 
     # @abstractmethod
     # def delete(self, obj: T) -> bool:
