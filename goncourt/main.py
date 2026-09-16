@@ -4,7 +4,6 @@
 """
 Application de gestion du prix littéraire Goncourt
 """
-from random import choice
 
 from business.contest import Contest
 from daos.selection_dao import SelectionDao
@@ -14,6 +13,11 @@ def main() -> None:
     """Programme principal."""
     print("""--------- Bienvenue ---------""")
 
+    # Pour le président, ajout de livres à la sélection 2 ou 3
+    contest = Contest()
+    contest.indicate_selection_books()
+
+    # Pour tout utilisateur, affichage des livres en compétition
     print("Voici les sélections disponibles:")
     selection_dao: SelectionDao = SelectionDao()
     selections = selection_dao.read_all()

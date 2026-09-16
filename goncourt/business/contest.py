@@ -55,3 +55,77 @@ class Contest:
             print()
             print('-' * 30)
             print()
+
+    def indicate_selection_books(self):
+        """Permet de renseigner les livres des deuxième et troisième sélections.
+
+        Le président choisit la sélection à compléter, puis sélectionne les livres
+        parmi ceux présents dans la sélection précédente.
+        """
+        selection_dao: SelectionDao = SelectionDao()
+        book_dao: BookDao = BookDao()
+
+        # Choix de la sélection à compléter
+        try:
+            selection_to_update = int(input("Choisissez la sélection à laquelle vous devez ajouter des livres : "))
+        except ValueError:
+            print("Veuillez choisir un numéro de sélection valide")
+            return
+
+        # Seules les deuxième et troisième sélections peuvent être renseignées
+        if selection_to_update not in (2, 3):
+            print("Vous pouvez uniquement renseigner les sélections 2 et 3.")
+            return
+        selection = selection_dao.read_by_number(selection_to_update)
+        if selection is None:
+            print("Selection inexistante")
+            return
+
+        # Récupération des livres de la sélection précédente
+        previous_selection = selection_dao.read_by_number(selection_to_update - 1)
+        if previous_selection is None:
+            print("La sélection précédente n'existe pas.")
+            return
+        books = book_dao.read_by_selection(previous_selection.id_selection)
+
+        print("Livres en compétition")
+        for book in books:
+            print(f"{book.id_book} - {book.title}")
+
+        # Saisie des livres retenus pour la nouvelle sélection
+        print(f"Choisissez les livres à ajouter à la sélection {selection.number}")
+        books_choosed = input("Saisissez les numéros des livres séparés par / :")
+        id_books = books_choosed.split("/")
+
+        # Vérification que les livres choisis font bien partie de la sélection précédente
+        try:
+            for id_book in id_books:
+                id_book = int(id_book)
+
+                book_found = False
+
+                for book in books:
+                    if book.id_book == id_book:
+                        book_found = True
+                        break
+
+                if not book_found:
+                    print(f"Le livre {id_book} ne fait pas partie "
+                          f"de la sélection précédente {previous_selection.number}.")
+                    return
+
+                selection_dao.add_book(selection.id_selection, id_book)
+
+        except ValueError:
+            print("Les identifiants des livres doivent être des nombres.")
+            return
+
+        # Affichage de la nouvelle sélection
+        print("-" * 30)
+        print("Voici maintenant les livres en compétitions :")
+        print(selection)
+        print("-" * 30)
+
+        books_added = book_dao.read_by_selection(selection.id_selection)
+        for book in books_added:
+            print(book.title)
