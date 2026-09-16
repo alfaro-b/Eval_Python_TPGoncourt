@@ -1,7 +1,7 @@
+from daos.book_dao import BookDao
 from daos.selection_dao import SelectionDao
 from models.selection import Selection
 from datetime import date
-
 
 selection_dao = SelectionDao()
 
@@ -25,3 +25,17 @@ new_id = selection_dao.create(selection_test)
 print(f"ID créé : {new_id}")
 print(f"Objet : {selection_test}")
 print(f"ID dans l'objet : {selection_test.id_selection}")
+
+# Test ajout d'un livre à une sélection
+print("\n----- ADD BOOK -----")
+result = selection_dao.add_book(2, 2)
+print(f"Ajout effectué : {result}")
+
+book_dao = BookDao()
+books = book_dao.read_by_selection(2)
+for book in books:
+    print(book.title)
+
+print("Test : ajout d'un même livre une deuxième fois")
+result = selection_dao.add_book(2, 2)
+print(f"Ajout effectué : {result}")

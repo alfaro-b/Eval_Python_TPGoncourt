@@ -133,3 +133,31 @@ class SelectionDao(Dao[Selection]):
                 print(f"Erreur lors de la lecture de la sélection : {error}")
 
         return None
+
+    def add_book(self, id_selection: int, id_book: int) -> bool:
+        """Ajoute un livre à une sélection
+
+        :param id_selection: identifiant de la sélection
+        :param id_book: identifiant du livre
+        :return: True si l'ajout a pu être réalisé
+        """
+
+        if id_selection is None or id_book is None:
+            return False
+
+        with Dao.connection.cursor() as cursor:
+            try:
+                sql = """
+                    INSERT INTO belong (id_selection, id_book)
+                    VALUES (%s,%s)
+                """
+                cursor.execute(sql, (id_selection, id_book))
+
+                Dao.connection.commit()
+
+            except Exception as error:
+                Dao.connection.rollback()
+                print(f"Erreur lors de l'ajout du livre à la sélection : {error}")
+                return False
+
+        return True
