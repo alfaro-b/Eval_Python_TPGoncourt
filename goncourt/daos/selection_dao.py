@@ -191,3 +191,28 @@ class SelectionDao(Dao[Selection]):
                 return False
 
         return True
+
+    def read_book_votes(self, id_selection: int, id_book: int) -> int | None:
+        """Retourne le nombre de votes d'un livre pour une sélection
+
+        :param id_selection: identifiant de la selection
+        :param id_book: identifiant du livre
+        :return: retourne le nombre de votes d'un livre
+        """
+        with Dao.connection.cursor() as cursor:
+            try:
+                sql = """
+                    SELECT votes_number
+                    FROM belong
+                    WHERE id_selection = %s AND id_book = %s
+                """
+                cursor.execute(sql, (id_selection, id_book))
+                record = cursor.fetchone()
+
+                if record is not None:
+                    return record['votes_number']
+
+            except Exception as error:
+                print(f"Erreur lors de la lecture des votes : {error}")
+
+        return None

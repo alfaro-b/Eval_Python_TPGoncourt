@@ -137,19 +137,29 @@ class Contest:
 
         # Affichage de la liste des livres de la sélection 3
         selection = selection_dao.read_by_number(3)
+
         if selection is None:
             print("La sélection 3 n'existe pas.")
             return
+
         books_selection3 = book_dao.read_by_selection(selection.id_selection)
+
+        print("-" * 30)
         print("Livres en compétitions - Sélection 3 : ")
         for book in books_selection3:
-            print(f"{book.id_book} - {book.title}")
+            votes = selection_dao.read_book_votes(selection.id_selection, book.id_book)
+
+            if votes is None:
+                print(f"{book.id_book} - {book.title} - Votes : non renseignés")
+            else:
+                print(f"{book.id_book} - {book.title} - Votes : {votes}")
 
         other_book: str = "oui"
         while other_book in ("oui", "o"):
 
             # Choix du livre
-            print("Pour quel livre, vous souhaitez ajouter le nombre de votes?")
+            print("-" * 30)
+            print("Pour quel livre, vous souhaitez ajouter le nombre de votes? ")
             try:
                 book_choosed_id = int(input("Saisissez le numéro du livre : "))
             except ValueError:
@@ -170,9 +180,10 @@ class Contest:
 
             # Saisie du nombre de votes pour le livre choisi
             book_choosed = book_dao.read(book_choosed_id)
-            print(f"Pour le livre {book_choosed.title}")
+            print("-" * 30)
+            print(f"Pour le livre '{book_choosed.title}'")
             try:
-                votes_nbr = int(input("Saisissez le nombre de votes"))
+                votes_nbr = int(input("Saisissez le nombre de votes "))
             except ValueError:
                 print("Le nombre de votes doit être un nombre.")
                 continue
@@ -182,4 +193,17 @@ class Contest:
 
             selection_dao.add_votes(selection.id_selection, book_choosed_id, votes_nbr)
 
-            other_book = input("Voulez-vous saisir un autre vote? Saisissez oui ou non.").lower()
+            # Réaffichage de la liste après ajout pour vérification
+            books_selection3 = book_dao.read_by_selection(selection.id_selection)
+
+            print("-" * 30)
+            print("Livres en compétitions - Sélection 3 : ")
+            for book in books_selection3:
+                votes = selection_dao.read_book_votes(selection.id_selection, book.id_book)
+
+                if votes is None:
+                    print(f"{book.id_book} - {book.title} - Votes : non renseignés")
+                else:
+                    print(f"{book.id_book} - {book.title} - Votes : {votes}")
+
+            other_book = input("Voulez-vous saisir un autre vote? Saisissez oui ou non. ").lower()
