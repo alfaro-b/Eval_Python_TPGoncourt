@@ -31,10 +31,10 @@ class Book:
     id_book: int | None = field(default=None)
 
     def __str__(self) -> str:
-        return (f"{self.title}\n "
-                f"Résumé :  {self.summary}\n "
+        return (f"{self.title}\n"
+                f"Résumé : {self.summary}\n"
                 f"Date de parution : {self.publication_date}\n"
                 f"Nombre de pages : {self.nbr_pages}\n"
                 f"ISBN : {self.isbn}\n"
-                f"Prix : {self.publisher_price}\n"
+                f"Prix : {self.publisher_price}"
                 )

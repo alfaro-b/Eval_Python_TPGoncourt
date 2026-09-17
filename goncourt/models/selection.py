@@ -20,5 +20,5 @@ class Selection:
 
     def __str__(self) -> str:
         return (f"Prix Goncourt - Sélection {self.number}\n"
-                f"Date : {self.date.strftime('%d/%m/%Y')}")
+                f"Date : {self.date.strftime('%d/%m/%Y')}\n")
 
