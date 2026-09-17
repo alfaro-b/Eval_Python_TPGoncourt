@@ -207,3 +207,40 @@ class Contest:
                     print(f"{book.id_book} - {book.title} - Votes : {votes}")
 
             other_book = input("Voulez-vous saisir un autre vote? Saisissez oui ou non. ").lower()
+
+    def display_winner(self) -> None:
+        """Détermine et affiche le livre ayant obtenu le plus de votes"""
+
+        selection_dao: SelectionDao = SelectionDao()
+        book_dao: BookDao = BookDao()
+
+        # Récupération des livres de la sélection 3
+        selection = selection_dao.read_by_number(3)
+
+        if selection is None:
+            print("La sélection 3 n'existe pas.")
+            return
+
+        books_selection3 = book_dao.read_by_selection(selection.id_selection)
+
+        # Détermination du gagnant
+        winner = None
+        max_votes = 0
+
+        for book in books_selection3:
+            votes = selection_dao.read_book_votes(selection.id_selection, book.id_book)
+
+            if votes is None:
+                continue
+
+            if votes > max_votes:
+                max_votes = votes
+                winner = book
+
+        # Affichage du gagnant
+        if winner is None:
+            print("Aucun vote n'a encore été renseigné.")
+            return
+
+        print(f"Le livre '{winner.title}' est le gagant avec {max_votes} votes.")
+
