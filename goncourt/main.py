@@ -37,7 +37,11 @@ def main() -> None:
             for selection in selections:
                 print(selection)
 
-            selection_choosed = int(input("Saisissez le numéro de la sélection que vous souhaitez voir : "))
+            try:
+                selection_choosed = int(input("Saisissez le numéro de la sélection que vous souhaitez voir : "))
+            except ValueError:
+                print("Le numéro de la sélection doit être un nombre.")
+                continue
 
             print('-' * 50)
             contest.display_selection(selection_choosed)
