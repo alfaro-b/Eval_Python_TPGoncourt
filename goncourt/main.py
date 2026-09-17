@@ -19,8 +19,9 @@ def main() -> None:
         print("""--------- Bienvenue ---------""")
 
         print("1- Consulter les sélections\n"
-              "2- Espace président\n"
-              "3- Quitter\n")
+              "2- Afficher le gagnant\n"
+              "3- Espace président\n"
+              "4- Quitter\n")
 
         user_choice = input("Votre choix : \n")
 
@@ -42,15 +43,19 @@ def main() -> None:
             contest.display_selection(selection_choosed)
             print('-' * 50)
 
+        elif user_choice == "2":
+            # Afficher le gagnant
+            contest.display_winner()
+
         # -------------------------
         # PRESIDENT
         # -------------------------
 
-        elif user_choice == "2":
+        elif user_choice == "3":
             while True:
                 print('-' * 50)
                 print("Que souhaitez-vous faire ?\n")
-                print("1- Définier les livres de la 2ème et 3ème sélection\n"
+                print("1- Définir les livres de la 2ème et 3ème sélection\n"
                       "2- Saisir les votes du dernier tour de scrutin pour les livres de la sélection 3\n"
                       "3- Quitter\n")
 
@@ -65,7 +70,7 @@ def main() -> None:
                     contest.add_final_vote()
 
                 elif president_choice == "3":
-                    print("Au revoir")
+                    print("Retour au menu principal")
                     break
 
                 else:
@@ -75,7 +80,7 @@ def main() -> None:
         # QUITTER
         # -------------------------
 
-        elif user_choice == "3":
+        elif user_choice == "4":
             print("Au revoir.")
             break
 

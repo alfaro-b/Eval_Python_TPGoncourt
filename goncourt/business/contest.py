@@ -213,6 +213,9 @@ class Contest:
 
         selection_dao: SelectionDao = SelectionDao()
         book_dao: BookDao = BookDao()
+        author_dao: AuthorDao = AuthorDao()
+        publisher_dao: PublisherDao = PublisherDao()
+        main_character_dao: MainCharacterDao = MainCharacterDao()
 
         # Récupération des livres de la sélection 3
         selection = selection_dao.read_by_number(3)
@@ -242,5 +245,24 @@ class Contest:
             print("Aucun vote n'a encore été renseigné.")
             return
 
-        print(f"Le livre '{winner.title}' est le gagant avec {max_votes} votes.")
+        print("-" * 30)
+        print(f"{selection}")
+        print("-" * 30)
+        print(f"Le livre '{winner.title}' est le gagnant avec {max_votes} votes.")
+        print("-" * 30)
 
+        author = author_dao.read(winner.id_author)
+        publisher = publisher_dao.read(winner.id_publisher)
+        characters = main_character_dao.read_by_book(winner.id_book)
+
+        print(winner)
+        print(f"Auteur : {author}")
+        print(f"Editeur : {publisher}")
+
+        if characters:
+            print("Personnages principaux : ")
+            for character in characters:
+                print(f"- {character}")
+        else:
+            print("Personnages principaux : non renseignés")
+        print("-" * 30)
