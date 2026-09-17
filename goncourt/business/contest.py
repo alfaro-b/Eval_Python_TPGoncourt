@@ -145,36 +145,41 @@ class Contest:
         for book in books_selection3:
             print(f"{book.id_book} - {book.title}")
 
-        # Vérification que le livre choisi fait partie de la sélection 3
-        print("Pour quel livre, vous souhaitez ajouter le nombre de votes?")
-        try:
-            book_choosed_id = int(input("Saisissez le numéro du livre : "))
-        except ValueError:
-            print("Les identifiants des livres doivent être des nombres.")
-            return
+        other_book: str = "oui"
+        while other_book in ("oui", "o"):
 
-        # Vérification que les livres choisis font bien partie de la sélection 3
-        book_found = False
+            # Choix du livre
+            print("Pour quel livre, vous souhaitez ajouter le nombre de votes?")
+            try:
+                book_choosed_id = int(input("Saisissez le numéro du livre : "))
+            except ValueError:
+                print("Les identifiants des livres doivent être des nombres.")
+                continue
 
-        for book in books_selection3:
-            if book.id_book == book_choosed_id:
-                book_found = True
-                break
+            # Vérification que les livres choisis font bien partie de la sélection 3
+            book_found = False
 
-        if not book_found:
-            print(f"Le livre {book_choosed_id} ne fait pas partie de la sélection 3.")
-            return
+            for book in books_selection3:
+                if book.id_book == book_choosed_id:
+                    book_found = True
+                    break
 
-        # Saisie du nombre de votes pour le livre choisi
-        book_choosed = book_dao.read(book_choosed_id)
-        print(f"Pour le livre {book_choosed.title}")
-        try:
-            votes_nbr = int(input("Saisissez le nombre de votes"))
-        except ValueError:
-            print("Le nombre de votes doit être un nombre.")
-            return
-        if votes_nbr <= 0:
-            print("Le nombre de votes ne peut être négatif.")
-            return
+            if not book_found:
+                print(f"Le livre {book_choosed_id} ne fait pas partie de la sélection 3.")
+                continue
 
-        selection_dao.add_votes(selection.id_selection, book_choosed_id, votes_nbr)
+            # Saisie du nombre de votes pour le livre choisi
+            book_choosed = book_dao.read(book_choosed_id)
+            print(f"Pour le livre {book_choosed.title}")
+            try:
+                votes_nbr = int(input("Saisissez le nombre de votes"))
+            except ValueError:
+                print("Le nombre de votes doit être un nombre.")
+                continue
+            if votes_nbr < 0:
+                print("Le nombre de votes ne peut être négatif.")
+                continue
+
+            selection_dao.add_votes(selection.id_selection, book_choosed_id, votes_nbr)
+
+            other_book = input("Voulez-vous saisir un autre vote? Saisissez oui ou non.").lower()
