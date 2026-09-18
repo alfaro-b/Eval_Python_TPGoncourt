@@ -11,6 +11,7 @@ from daos.author_dao import AuthorDao
 from daos.publisher_dao import PublisherDao
 from daos.main_character_dao import MainCharacterDao
 from daos.selection_dao import SelectionDao
+from models.book import Book
 
 MISSING_SELECTION_ID = "Identifiant de sélection manquant."
 
@@ -117,16 +118,11 @@ class Contest:
             for id_book_str in id_books:
                 id_book = int(id_book_str)
 
-                book_found = False
-
-                for book in books:
-                    if book.id_book == id_book:
-                        book_found = True
-                        break
-
-                if not book_found:
-                    print(f"Le livre {id_book} ne fait pas partie "
-                          f"de la sélection précédente {previous_selection.number}.")
+                if not self.is_book_in_selection(id_book, books):
+                    print(
+                        f"Le livre {id_book} ne fait pas partie "
+                        f"de la sélection précédente {previous_selection.number}."
+                    )
                     return
 
                 selection_dao.add_book(selection.id_selection, id_book)
@@ -144,6 +140,14 @@ class Contest:
         books_added = book_dao.read_by_selection(selection.id_selection)
         for book in books_added:
             print(book.title)
+
+    def is_book_in_selection(self, id_book: int, books: list[Book]) -> bool:
+        """Vérifie si un livre appartient à la sélection."""
+        for book in books:
+            if book.id_book == id_book:
+                return True
+
+        return False
 
     def add_final_vote(self) -> None:
         """Permet au président d'ajouter le nombre de votes à un livre de la sélection 3."""
