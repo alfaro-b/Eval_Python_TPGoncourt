@@ -15,6 +15,7 @@ from models.book import Book
 
 MISSING_SELECTION_ID = "Identifiant de sélection manquant."
 
+
 @dataclass
 class Contest:
     """Couche métier de l'application de gestion du prix littéraire Goncourt,
@@ -142,7 +143,13 @@ class Contest:
             print(book.title)
 
     def is_book_in_selection(self, id_book: int, books: list[Book]) -> bool:
-        """Vérifie si un livre appartient à la sélection."""
+        """Vérifie si un livre appartient à une sélection donnée
+
+        :param id_book: identifiant du livre
+        :param books: liste d'objet Book
+        :return: retourne si le livre donné n'est pas dans la sélection
+        """
+
         for book in books:
             if book.id_book == id_book:
                 return True
@@ -166,17 +173,7 @@ class Contest:
 
         books_selection3 = book_dao.read_by_selection(selection.id_selection)
 
-        print("-" * 30)
-        print("Livres en compétitions - Sélection 3 : ")
-        for book in books_selection3:
-            if book.id_book is None:
-                continue
-            votes = selection_dao.read_book_votes(selection.id_selection, book.id_book)
-
-            if votes is None:
-                print(f"{book.id_book} - {book.title} - Votes : non renseignés")
-            else:
-                print(f"{book.id_book} - {book.title} - Votes : {votes}")
+        self.display_books_votes(books_selection3, selection.id_selection, selection_dao)
 
         other_book: str = "oui"
         while other_book in ("oui", "o"):
@@ -191,14 +188,7 @@ class Contest:
                 continue
 
             # Vérification que les livres choisis font bien partie de la sélection 3
-            book_found = False
-
-            for book in books_selection3:
-                if book.id_book == book_choosed_id:
-                    book_found = True
-                    break
-
-            if not book_found:
+            if not self.is_book_in_selection(book_choosed_id, books_selection3):
                 print(f"Le livre {book_choosed_id} ne fait pas partie de la sélection 3.")
                 continue
 
@@ -224,20 +214,26 @@ class Contest:
             # Réaffichage de la liste après ajout pour vérification
             books_selection3 = book_dao.read_by_selection(selection.id_selection)
 
-            print("-" * 30)
-            print("Livres en compétitions - Sélection 3 : ")
-            for book in books_selection3:
-                if book.id_book is None:
-                    continue
-
-                votes = selection_dao.read_book_votes(selection.id_selection, book.id_book)
-
-                if votes is None:
-                    print(f"{book.id_book} - {book.title} - Votes : non renseignés")
-                else:
-                    print(f"{book.id_book} - {book.title} - Votes : {votes}")
+            self.display_books_votes(books_selection3, selection.id_selection, selection_dao)
 
             other_book = input("Voulez-vous saisir un autre vote? Saisissez oui ou non. ").lower()
+
+    def display_books_votes(self, books: list[Book], id_selection: int, selection_dao: SelectionDao) -> None:
+        """Affiche les livres d'une sélection avec leur nombre de votes."""
+
+        print("-" * 30)
+        print("Livres en compétitions - Sélection 3 : ")
+
+        for book in books:
+            if book.id_book is None:
+                continue
+
+            votes = selection_dao.read_book_votes(id_selection, book.id_book)
+
+            if votes is None:
+                print(f"{book.id_book} - {book.title} - Votes : non renseignés")
+            else:
+                print(f"{book.id_book} - {book.title} - Votes : {votes}")
 
     def display_winner(self) -> None:
         """Détermine et affiche le livre ayant obtenu le plus de votes"""
