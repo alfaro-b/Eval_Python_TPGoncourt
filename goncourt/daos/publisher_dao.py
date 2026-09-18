@@ -12,6 +12,10 @@ from dataclasses import dataclass
 @dataclass
 class PublisherDao(Dao[Publisher]):
     def read_all(self) -> list[Publisher]:
+        """Retourne la liste de tous les éditeurs.
+
+        :return: liste de tous les éditeurs
+        """
         publishers: list[Publisher] = []
 
         with Dao.connection.cursor() as cursor:
@@ -32,10 +36,10 @@ class PublisherDao(Dao[Publisher]):
         return publishers
 
     def create(self, publisher: Publisher) -> int | None:
-        """Crée en BD l'entité Publisher correspondant à publisher
+        """Crée un éditeur en BDD.
 
-        :param publisher: éditeur à créer en BDD sous forme d'entité publisher
-        :return: l'id de l'entité insérée en BDD
+        :param publisher: éditeur à créer
+        :return: identifiant de l'éditeur créé, ou None en cas d'échec
         """
         with Dao.connection.cursor() as cursor:
             try:
@@ -60,8 +64,11 @@ class PublisherDao(Dao[Publisher]):
                 return None
 
     def read(self, id_publisher: int) -> Publisher | None:
-        """Retourne l'éditeur correspondant à l'identifiant fourni
-           ou None s'il n'a pu être trouvé"""
+        """Retourne l'éditeur correspondant à l'identifiant fourni.
+
+        :param id_publisher: identifiant de l'éditeur
+        :return: éditeur trouvé, ou None s'il n'existe pas
+        """
 
         with Dao.connection.cursor() as cursor:
             try:
@@ -83,9 +90,10 @@ class PublisherDao(Dao[Publisher]):
         return None
 
     def update(self, publisher: Publisher) -> bool:
-        """Met à jour en BD l'entité Publisher correspondant à publisher, pour y correspondre
-        :param publisher: éditeur déjà mis à jour en mémoire
-        :return: True si la mise à jour a pu être réalisée
+        """Met à jour un éditeur en BDD.
+
+        :param publisher: éditeur contenant les nouvelles données
+        :return: True si la mise à jour a été réalisée, False sinon
         """
         if publisher.id_publisher is None:
             return False
