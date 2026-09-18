@@ -155,12 +155,17 @@ class Contest:
         if selection is None:
             print("La sélection 3 n'existe pas.")
             return
+        if selection.id_selection is None:
+            print("Identifiant de sélection manquant.")
+            return
 
         books_selection3 = book_dao.read_by_selection(selection.id_selection)
 
         print("-" * 30)
         print("Livres en compétitions - Sélection 3 : ")
         for book in books_selection3:
+            if book.id_book is None:
+                continue
             votes = selection_dao.read_book_votes(selection.id_selection, book.id_book)
 
             if votes is None:
@@ -194,6 +199,10 @@ class Contest:
 
             # Saisie du nombre de votes pour le livre choisi
             book_choosed = book_dao.read(book_choosed_id)
+            if book_choosed is None:
+                print("Livre introuvable")
+                continue
+
             print("-" * 30)
             print(f"Pour le livre '{book_choosed.title}'")
             try:
