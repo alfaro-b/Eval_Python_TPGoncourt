@@ -11,6 +11,10 @@ from dataclasses import dataclass
 @dataclass
 class JuryMemberDao(Dao[JuryMember]):
     def read_all(self) -> list[JuryMember]:
+        """Retourne la liste de tous les membres du jury.
+
+        :return: liste de tous les membres du jury
+        """
         jury_members: list[JuryMember] = []
 
         with Dao.connection.cursor() as cursor:
@@ -43,10 +47,10 @@ class JuryMemberDao(Dao[JuryMember]):
         return jury_members
 
     def create(self, jury_member: JuryMember) -> int | None:
-        """Crée en BD l'entité JuryMember correspondant à jury_member
+        """Crée un membre du jury en BDD.
 
-        :param jury_member: membre du jury à créer en BDD sous forme d'entité jury_member
-        :return: l'id de l'entité insérée en BDD
+        :param jury_member: membre du jury à créer
+        :return: identifiant du membre du jury créé, ou None en cas d'échec
         """
         with Dao.connection.cursor() as cursor:
             try:
@@ -99,8 +103,11 @@ class JuryMemberDao(Dao[JuryMember]):
                 return None
 
     def read(self, id_jury_member: int) -> JuryMember | None:
-        """Retourne le membre du jury correspondant à l'identifiant fourni
-           ou None s'il n'a pu être trouvé"""
+        """Retourne le membre du jury correspondant à l'identifiant fourni.
+
+        :param id_jury_member: identifiant du membre du jury
+        :return: membre du jury trouvé, ou None s'il n'existe pas
+        """
 
         with Dao.connection.cursor() as cursor:
             try:
@@ -133,9 +140,10 @@ class JuryMemberDao(Dao[JuryMember]):
         return None
 
     def update(self, jury_member: JuryMember) -> bool:
-        """Met à jour en BD l'entité JuryMember correspondant à jury_member, pour y correspondre
-        :param jury_member: le membre du jury déjà mis à jour en mémoire
-        :return: True si la mise à jour a pu être réalisée
+        """Met à jour un membre du jury en BDD.
+
+        :param jury_member: membre du jury contenant les nouvelles données
+        :return: True si la mise à jour a été réalisée, False sinon
         """
         if jury_member.id_jury_member is None or jury_member.id_person is None:
             return False
@@ -183,8 +191,10 @@ class JuryMemberDao(Dao[JuryMember]):
                 return False
 
     def read_president(self) -> JuryMember | None:
-        """Retourne le président du jury
-           ou None s'il n'a pu être trouvé"""
+        """Retourne le président du jury.
+
+        :return: président du jury, ou None s'il n'est pas trouvé
+        """
 
         with Dao.connection.cursor() as cursor:
             try:
