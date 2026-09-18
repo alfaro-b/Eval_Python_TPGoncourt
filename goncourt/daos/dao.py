@@ -21,7 +21,7 @@ db_name: str = os.environ["DB_NAME"]
 
 @dataclass
 class Dao[T](ABC):
-    connection: ClassVar[pymysql.Connection] = pymysql.connect(
+    connection: ClassVar[pymysql.Connection[pymysql.cursors.DictCursor]] = pymysql.connect(
         host=db_host,
         user=db_user,
         password=db_password,
