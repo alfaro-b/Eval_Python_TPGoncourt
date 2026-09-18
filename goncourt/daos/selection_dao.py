@@ -12,6 +12,10 @@ from dataclasses import dataclass
 @dataclass
 class SelectionDao(Dao[Selection]):
     def read_all(self) -> list[Selection]:
+        """Retourne la liste de toutes les sélections.
+
+        :return: liste de toutes les sélections
+        """
         selections: list[Selection] = []
 
         with Dao.connection.cursor() as cursor:
@@ -33,10 +37,10 @@ class SelectionDao(Dao[Selection]):
         return selections
 
     def create(self, selection: Selection) -> int | None:
-        """Crée en BD l'entité Selection correspondant à selection
+        """Crée une sélection en BDD.
 
-        :param selection: sélection à créer en BDD sous forme d'entité selection
-        :return: l'id de l'entité insérée en BDD
+        :param selection: sélection à créer
+        :return: identifiant de la sélection créée, ou None en cas d'échec
         """
         with Dao.connection.cursor() as cursor:
             try:
@@ -61,8 +65,11 @@ class SelectionDao(Dao[Selection]):
                 return None
 
     def read(self, id_selection: int) -> Selection | None:
-        """Retourne la sélection correspondante à l'identifiant fourni
-           ou None s'il n'a pu être trouvé"""
+        """Retourne la sélection correspondant à l'identifiant fourni.
+
+        :param id_selection: identifiant de la sélection
+        :return: sélection trouvée, ou None si elle n'existe pas
+        """
 
         with Dao.connection.cursor() as cursor:
             try:
@@ -85,9 +92,10 @@ class SelectionDao(Dao[Selection]):
         return None
 
     def update(self, selection: Selection) -> bool:
-        """Met à jour en BD l'entité Selection correspondant à selection, pour y correspondre
-        :param selection: la sélection déjà mise à jour en mémoire
-        :return: True si la mise à jour a pu être réalisée
+        """Met à jour une sélection en BDD.
+
+        :param selection: sélection contenant les nouvelles données
+        :return: True si la mise à jour a été réalisée, False sinon
         """
         if selection.id_selection is None:
             return False
@@ -111,8 +119,11 @@ class SelectionDao(Dao[Selection]):
                 return False
 
     def read_by_number(self, number: int) -> Selection | None:
-        """Retourne la sélection correspondante au numéro fourni
-           ou None s'il n'a pu être trouvé"""
+        """Retourne la sélection correspondant au numéro fourni.
+
+        :param number: numéro de la sélection
+        :return: sélection trouvée, ou None si elle n'existe pas
+        """
 
         with Dao.connection.cursor() as cursor:
             try:
@@ -142,9 +153,6 @@ class SelectionDao(Dao[Selection]):
         :return: True si l'ajout a pu être réalisé
         """
 
-        if id_selection is None or id_book is None:
-            return False
-
         with Dao.connection.cursor() as cursor:
             try:
                 sql = """
@@ -163,16 +171,13 @@ class SelectionDao(Dao[Selection]):
         return True
 
     def add_votes(self, id_selection: int, id_book: int, votes_nbr: int) -> bool:
-        """Ajoute le nombre de votes à un livre de la sélection
+        """Ajoute le nombre de votes d'un livre pour une sélection.
 
-        :param votes_nbr: nombre de votes
         :param id_selection: identifiant de la sélection
         :param id_book: identifiant du livre
-        :return: True si l'ajout a pu être réalisé
+        :param votes_nbr: nombre de votes
+        :return: True si la mise à jour a été réalisée, False sinon
         """
-
-        if id_selection is None or id_book is None:
-            return False
 
         with Dao.connection.cursor() as cursor:
             try:
@@ -197,7 +202,7 @@ class SelectionDao(Dao[Selection]):
 
         :param id_selection: identifiant de la selection
         :param id_book: identifiant du livre
-        :return: retourne le nombre de votes d'un livre
+        :return: nombre de votes, ou None s'il n'est pas renseigné
         """
         with Dao.connection.cursor() as cursor:
             try:
