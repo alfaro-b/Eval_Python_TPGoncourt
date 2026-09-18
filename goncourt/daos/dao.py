@@ -13,14 +13,19 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+db_host: str = os.environ["DB_HOST"]
+db_user: str = os.environ["DB_USER"]
+db_password: str = os.environ["DB_PASSWORD"]
+db_name: str = os.environ["DB_NAME"]
+
 
 @dataclass
 class Dao[T](ABC):
     connection: ClassVar[pymysql.Connection] = pymysql.connect(
-        host=os.getenv("DB_HOST"),
-        user=os.getenv("DB_USER"),
-        password=os.getenv("DB_PASSWORD"),
-        database=os.getenv("DB_NAME"),
+        host=db_host,
+        user=db_user,
+        password=db_password,
+        database=db_name,
         cursorclass=pymysql.cursors.DictCursor
     )
 
@@ -48,18 +53,8 @@ class Dao[T](ABC):
         """
         ...
 
-    # @abstractmethod
-    # def delete(self, obj: T) -> bool:
-    #     """Supprime en BDD l'entité correspondant à obj
-    #
-    #     :param obj: objet dont l'entité correspondante est à supprimer
-    #     :return: True si la suppression a pu être réalisée
-    #     """
-    #     ...
-
     @abstractmethod
     def read_all(self) -> list[T]:
         """Retourne tous les objets correspondant à l'entité
         ou une liste vide si aucun objet n'est trouvé."""
         ...
-
