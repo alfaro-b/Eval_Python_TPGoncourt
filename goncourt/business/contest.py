@@ -19,7 +19,7 @@ class Contest:
     reprenant les cas d'utilisation et les spécifications fonctionnelles.
     """
 
-    def display_selection(self, selection_number: int):
+    def display_selection(self, selection_number: int) -> None:
         book_dao: BookDao = BookDao()
         author_dao: AuthorDao = AuthorDao()
         publisher_dao: PublisherDao = PublisherDao()
@@ -27,8 +27,13 @@ class Contest:
         selection_dao: SelectionDao = SelectionDao()
 
         selection = selection_dao.read_by_number(selection_number)
+
         if selection is None:
             print("Selection inexistante")
+            return
+
+        if selection.id_selection is None:
+            print("Identifiant de sélection manquant")
             return
 
         books = book_dao.read_by_selection(selection.id_selection)
@@ -39,11 +44,14 @@ class Contest:
         for book in books:
             author = author_dao.read(book.id_author)
             publisher = publisher_dao.read(book.id_publisher)
-            characters = main_character_dao.read_by_book(book.id_book)
+
+            characters = []
+            if book.id_book is not None:
+                characters = main_character_dao.read_by_book(book.id_book)
 
             print(book)
             print(f"Auteur : {author}")
-            print(f"Editeur : {publisher}")
+            print(f"Éditeur : {publisher}")
 
             if characters:
                 print("Personnages principaux : ")
