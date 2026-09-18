@@ -23,6 +23,10 @@ class Contest:
     """
 
     def display_selection(self, selection_number: int) -> None:
+        """Affiche les livres et les informations d'une sélection
+
+        :param selection_number: numéro de la sélection à afficher
+        """
         book_dao: BookDao = BookDao()
         author_dao: AuthorDao = AuthorDao()
         publisher_dao: PublisherDao = PublisherDao()
@@ -146,8 +150,8 @@ class Contest:
         """Vérifie si un livre appartient à une sélection donnée
 
         :param id_book: identifiant du livre
-        :param books: liste d'objet Book
-        :return: retourne si le livre donné n'est pas dans la sélection
+        :param books: liste des livres de la sélection
+        :return: retourne True si le livre appartient à la sélection, False sinon
         """
 
         for book in books:
@@ -219,7 +223,12 @@ class Contest:
             other_book = input("Voulez-vous saisir un autre vote? Saisissez oui ou non. ").lower()
 
     def display_books_votes(self, books: list[Book], id_selection: int, selection_dao: SelectionDao) -> None:
-        """Affiche les livres d'une sélection avec leur nombre de votes."""
+        """Affiche les livres d'une sélection avec leur nombre de votes.
+
+        :param books: liste des livres à afficher
+        :param id_selection: identifiant de la sélection
+        :param selection_dao: DAO utilisé pour récupérer les votes
+        """
 
         print("-" * 30)
         print("Livres en compétitions - Sélection 3 : ")
@@ -236,7 +245,7 @@ class Contest:
                 print(f"{book.id_book} - {book.title} - Votes : {votes}")
 
     def display_winner(self) -> None:
-        """Détermine et affiche le livre ayant obtenu le plus de votes"""
+        """Détermine et affiche le livre ayant obtenu le plus de votes."""
 
         selection_dao: SelectionDao = SelectionDao()
         book_dao: BookDao = BookDao()
@@ -251,7 +260,7 @@ class Contest:
             print("La sélection 3 n'existe pas.")
             return
         if selection.id_selection is None:
-            print("Identifiant de sélection manquant.")
+            print(MISSING_SELECTION_ID)
             return
 
         books_selection3 = book_dao.read_by_selection(selection.id_selection)
@@ -292,7 +301,7 @@ class Contest:
 
         print(winner)
         print(f"Auteur : {author}")
-        print(f"Editeur : {publisher}")
+        print(f"Éditeur : {publisher}")
 
         if characters:
             print("Personnages principaux : ")
