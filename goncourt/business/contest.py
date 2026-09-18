@@ -222,6 +222,9 @@ class Contest:
             print("-" * 30)
             print("Livres en compétitions - Sélection 3 : ")
             for book in books_selection3:
+                if book.id_book is None:
+                    continue
+
                 votes = selection_dao.read_book_votes(selection.id_selection, book.id_book)
 
                 if votes is None:
