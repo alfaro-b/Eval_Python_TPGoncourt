@@ -12,6 +12,10 @@ from dataclasses import dataclass
 @dataclass
 class MainCharacterDao(Dao[MainCharacter]):
     def read_all(self) -> list[MainCharacter]:
+        """Retourne la liste de tous les personnages principaux.
+
+        :return:liste de tous les personnages principaux
+        """
         main_characters: list[MainCharacter] = []
 
         with Dao.connection.cursor() as cursor:
@@ -33,10 +37,10 @@ class MainCharacterDao(Dao[MainCharacter]):
         return main_characters
 
     def create(self, main_character: MainCharacter) -> int | None:
-        """Crée en BD l'entité MainCharacter correspondant à main_character
+        """Crée un personnage principal en BDD.
 
-        :param main_character: personnage principal à créer en BDD sous forme d'entité main_character
-        :return: l'id de l'entité insérée en BDD
+        :param main_character: personnage principal à créer
+        :return: identifiant du personnage créé, ou None en cas d'échec
         """
         with Dao.connection.cursor() as cursor:
             try:
@@ -61,8 +65,11 @@ class MainCharacterDao(Dao[MainCharacter]):
                 return None
 
     def read(self, id_main_character: int) -> MainCharacter | None:
-        """Retourne le personnage principal correspondant à l'identifiant fourni
-           ou None s'il n'a pu être trouvé"""
+        """Retourne le personnage principal correspondant à l'identifiant fourni.
+
+        :param id_main_character: identifiant du personnage principal
+        :return: personnage principal trouvé, ou None s'il n'existe pas
+        """
 
         with Dao.connection.cursor() as cursor:
             try:
@@ -85,9 +92,10 @@ class MainCharacterDao(Dao[MainCharacter]):
         return None
 
     def update(self, main_character: MainCharacter) -> bool:
-        """Met à jour en BD l'entité MainCharacter correspondant à main_character, pour y correspondre
-        :param main_character: le personnage principal déjà mis à jour en mémoire
-        :return: True si la mise à jour a pu être réalisée
+        """Met à jour un personnage principal en BDD.
+
+        :param main_character: personnage principal contenant les nouvelles données
+        :return: True si la mise à jour a été réalisée, False sinon
         """
         if main_character.id_main_character is None:
             return False
@@ -111,10 +119,10 @@ class MainCharacterDao(Dao[MainCharacter]):
                 return False
 
     def read_by_book(self, id_book: int) -> list[MainCharacter]:
-        """ Retourne les personnages principaux correspondant à un livre
+        """Retourne les personnages principaux associés à un livre.
 
         :param id_book: identifiant du livre
-        :return: liste des personnages principaux
+        :return: liste des personnages principaux associés au livre
         """
         main_characters: list[MainCharacter] = []
 
