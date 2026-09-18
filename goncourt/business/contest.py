@@ -64,7 +64,7 @@ class Contest:
             print('-' * 30)
             print()
 
-    def indicate_selection_books(self):
+    def indicate_selection_books(self) -> None:
         """Permet de renseigner les livres des deuxième et troisième sélections.
 
         Le président choisit la sélection à compléter, puis sélectionne les livres
@@ -138,7 +138,7 @@ class Contest:
         for book in books_added:
             print(book.title)
 
-    def add_final_vote(self):
+    def add_final_vote(self) -> None:
         """Permet au président d'ajouter le nombre de votes à un livre de la sélection 3."""
         selection_dao: SelectionDao = SelectionDao()
         book_dao: BookDao = BookDao()
