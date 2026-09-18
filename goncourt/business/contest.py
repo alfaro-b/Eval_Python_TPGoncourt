@@ -88,11 +88,17 @@ class Contest:
         if selection is None:
             print("Selection inexistante")
             return
+        if selection.id_selection is None:
+            print("Identifiant de sélection manquant.")
+            return
 
         # Récupération des livres de la sélection précédente
         previous_selection = selection_dao.read_by_number(selection_to_update - 1)
         if previous_selection is None:
             print("La sélection précédente n'existe pas.")
+            return
+        if previous_selection.id_selection is None:
+            print("Identifiant de la sélection précédente manquant.")
             return
         books = book_dao.read_by_selection(previous_selection.id_selection)
 
@@ -107,8 +113,8 @@ class Contest:
 
         # Vérification que les livres choisis font bien partie de la sélection précédente
         try:
-            for id_book in id_books:
-                id_book = int(id_book)
+            for id_book_str in id_books:
+                id_book = int(id_book_str)
 
                 book_found = False
 
