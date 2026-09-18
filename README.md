@@ -31,7 +31,7 @@ Le projet utilise une architecture multicouche :
 Créer et activer un environnement virtuel Python, puis installer les dépendances :
 
 ```bash
-python -m pip install -r requirements.txt
+python -m pip install -r goncourt/requirements.txt
 ```
 
 ### 2. Créer la base de données
@@ -46,7 +46,7 @@ dans MySQL ou MariaDB.
 
 ### 3. Configurer la connexion
 
-Créer un fichier `.env` à la racine du projet :
+Créer un fichier `.env` dans le dossier goncourt.
 
 ```text
 DB_HOST=localhost
@@ -62,7 +62,7 @@ Le fichier `.env` n'est pas versionné afin de ne pas exposer les informations d
 Lancer l'application depuis la racine du projet :
 
 ```bash
-python main.py
+python goncourt/main.py
 ```
 
 ## Vérification du typage
