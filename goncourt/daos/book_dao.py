@@ -12,6 +12,10 @@ from dataclasses import dataclass
 @dataclass
 class BookDao(Dao[Book]):
     def read_all(self) -> list[Book]:
+        """Retourne la liste de tous les livres.
+
+        :return:liste de tous les livres
+        """
         books: list[Book] = []
 
         with Dao.connection.cursor() as cursor:
@@ -39,10 +43,10 @@ class BookDao(Dao[Book]):
         return books
 
     def create(self, book: Book) -> int | None:
-        """Crée en BD l'entité Book correspondant à book
+        """Crée un livre en BDD.
 
-        :param book: livre à créer en BDD sous forme d'entité book
-        :return: l'id de l'entité insérée en BDD
+        :param book: livre à créer
+        :return: identifiant du livre créé, ou None en cas d'échec
         """
         with Dao.connection.cursor() as cursor:
             try:
@@ -86,8 +90,11 @@ class BookDao(Dao[Book]):
                 return None
 
     def read(self, id_book: int) -> Book | None:
-        """Retourne le livre correspondant à l'identifiant fourni
-           ou None s'il n'a pu être trouvé"""
+        """Retourne le livre correspondant à l'identifiant fourni.
+
+        :param id_book: identifiant du livre
+        :return: livre trouvé, ou None s'il n'existe pas
+        """
 
         with Dao.connection.cursor() as cursor:
             try:
@@ -116,9 +123,10 @@ class BookDao(Dao[Book]):
         return None
 
     def update(self, book: Book) -> bool:
-        """Met à jour en BD l'entité Book correspondant à book, pour y correspondre
-        :param book: le livre déjà mis à jour en mémoire
-        :return: True si la mise à jour a pu être réalisée
+        """Met à jour un livre en BDD.
+
+        :param book: livre contenant les nouvelles données
+        :return: True si la mise à jour a été réalisée, False sinon
         """
         if book.id_book is None:
             return False
@@ -162,6 +170,11 @@ class BookDao(Dao[Book]):
                 return False
 
     def read_by_selection(self, id_selection: int) -> list[Book]:
+        """Retourne les livres appartenant à une sélection.
+
+        :param id_selection: identifiant de la sélection
+        :return: liste des livres appartenant à la sélection
+        """
         books: list[Book] = []
 
         with Dao.connection.cursor() as cursor:
