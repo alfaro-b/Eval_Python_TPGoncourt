@@ -10,3 +10,6 @@ __pycache__/
 
 # Variables / secrets
 .env
+
+# Fichier temporaire de modélisation
+*.lo1
