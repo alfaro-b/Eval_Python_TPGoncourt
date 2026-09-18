@@ -12,6 +12,7 @@ from daos.publisher_dao import PublisherDao
 from daos.main_character_dao import MainCharacterDao
 from daos.selection_dao import SelectionDao
 
+MISSING_SELECTION_ID = "Identifiant de sélection manquant."
 
 @dataclass
 class Contest:
@@ -33,7 +34,7 @@ class Contest:
             return
 
         if selection.id_selection is None:
-            print("Identifiant de sélection manquant")
+            print(MISSING_SELECTION_ID)
             return
 
         books = book_dao.read_by_selection(selection.id_selection)
@@ -89,7 +90,7 @@ class Contest:
             print("Selection inexistante")
             return
         if selection.id_selection is None:
-            print("Identifiant de sélection manquant.")
+            print(MISSING_SELECTION_ID)
             return
 
         # Récupération des livres de la sélection précédente
@@ -156,7 +157,7 @@ class Contest:
             print("La sélection 3 n'existe pas.")
             return
         if selection.id_selection is None:
-            print("Identifiant de sélection manquant.")
+            print(MISSING_SELECTION_ID)
             return
 
         books_selection3 = book_dao.read_by_selection(selection.id_selection)
