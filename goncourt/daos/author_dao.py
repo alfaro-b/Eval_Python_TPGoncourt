@@ -11,6 +11,10 @@ from dataclasses import dataclass
 @dataclass
 class AuthorDao(Dao[Author]):
     def read_all(self) -> list[Author]:
+        """Retourne la liste de tous les auteurs.
+
+        :return: la liste de tous les auteurs
+        """
         authors: list[Author] = []
 
         with Dao.connection.cursor() as cursor:
@@ -43,10 +47,10 @@ class AuthorDao(Dao[Author]):
         return authors
 
     def create(self, author: Author) -> int | None:
-        """Crée en BD l'entité Author correspondant à author
+        """Crée un auteur en BDD.
 
-        :param author: auteur à créer en BDD sous forme d'entité author
-        :return: l'id de l'entité insérée en BDD
+        :param author: auteur à créer
+        :return: identifiant de l'auteur créé, ou None en cas d'échec
         """
         with Dao.connection.cursor() as cursor:
             try:
@@ -95,12 +99,15 @@ class AuthorDao(Dao[Author]):
 
             except Exception as error:
                 Dao.connection.rollback()
-                print(f"Erreur lors de la création du auteur : {error}")
+                print(f"Erreur lors de la création de l'auteur : {error}")
                 return None
 
     def read(self, id_author: int) -> Author | None:
-        """Retourne l'auteur correspondant à l'identifiant fourni
-           ou None s'il n'a pu être trouvé"""
+        """Retourne l'auteur correspondant à l'identifiant fourni.
+
+        :param id_author: identifiant de l'auteur
+        :return: auteur trouvé, ou None s'il n'existe pas
+        """
 
         with Dao.connection.cursor() as cursor:
             try:
@@ -133,9 +140,10 @@ class AuthorDao(Dao[Author]):
         return None
 
     def update(self, author: Author) -> bool:
-        """Met à jour en BD l'entité Author correspondant à author, pour y correspondre
-        :param author: l'auteur déjà mis à jour en mémoire
-        :return: True si la mise à jour a pu être réalisée
+        """Met à jour un auteur en BDD.
+
+        :param author: auteur contenant les nouvelles données
+        :return: True si la mise à jour a été réalisée, False sinon
         """
         if author.id_author is None or author.id_person is None:
             return False
