@@ -231,6 +231,9 @@ class Contest:
         if selection is None:
             print("La sélection 3 n'existe pas.")
             return
+        if selection.id_selection is None:
+            print("Identifiant de sélection manquant.")
+            return
 
         books_selection3 = book_dao.read_by_selection(selection.id_selection)
 
@@ -239,6 +242,8 @@ class Contest:
         max_votes = 0
 
         for book in books_selection3:
+            if book.id_book is None:
+                continue
             votes = selection_dao.read_book_votes(selection.id_selection, book.id_book)
 
             if votes is None:
@@ -261,7 +266,10 @@ class Contest:
 
         author = author_dao.read(winner.id_author)
         publisher = publisher_dao.read(winner.id_publisher)
-        characters = main_character_dao.read_by_book(winner.id_book)
+
+        characters = []
+        if winner.id_book is not None:
+            characters = main_character_dao.read_by_book(winner.id_book)
 
         print(winner)
         print(f"Auteur : {author}")
